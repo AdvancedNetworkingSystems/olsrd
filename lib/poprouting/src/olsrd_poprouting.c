@@ -86,10 +86,12 @@ bool isCommand(const char *str, unsigned long long siw) {
   }
   cmd = strtok(string, s);
   s_timer = strtok(NULL, s);
-  timer = atof(s_timer);
+  if (s_timer)
+    timer = atof(s_timer);
+  else
+    timer = 0;
 
-
-  return (!strcmp(cmd, prefix) && timer>0);
+  return (!strcmp(cmd, prefix) && timer>=0);
 }
 
 void output_error(struct autobuf *abuf, unsigned int status, const char * req __attribute__((unused)), bool http_headers) {
@@ -112,7 +114,9 @@ void set_hello_timer(struct autobuf *abuf) {
   assert(abuf);
   in = olsr_cnf->interfaces;
   if(!timer){
-    abuf_puts(abuf, "1\r\n");
+    char response[1024];
+    sprintf(response, "hello:%.2f\n", (double)in->cnf->hello_params.emission_interval);
+    abuf_puts(abuf, response);
     return;
   }
   while (in != NULL) {
@@ -134,7 +138,9 @@ void set_tc_timer(struct autobuf *abuf) {
   struct olsr_if *in;
   in = olsr_cnf->interfaces;
   if(!timer){
-    abuf_puts(abuf, "1\r\n");
+    char response[1024];
+    sprintf(response, "tc:%.2f\n", (double)in->cnf->tc_params.emission_interval);
+    abuf_puts(abuf, response);
     return;
   }
   while (in != NULL) {
