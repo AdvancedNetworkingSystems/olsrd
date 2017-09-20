@@ -109,8 +109,12 @@ void output_error(struct autobuf *abuf, unsigned int status, const char * req __
 
 void set_hello_timer(struct autobuf *abuf) {
   struct olsr_if *in;
+  assert(abuf);
   in = olsr_cnf->interfaces;
-  if(!timer) return;
+  if(!timer){
+    abuf_puts(abuf, "1\r\n");
+    return;
+  }
   while (in != NULL) {
     olsr_printf(1, "(POPROUTING) Setting Hello Timer=%f for interface %s\n", (double)timer, in->name);
     //olsr_change_timer(in->interf->hello_gen_timer, timer * MSEC_PER_SEC, 0, 1);
@@ -122,13 +126,17 @@ void set_hello_timer(struct autobuf *abuf) {
     in->interf->hello_etime = in->cnf->hello_params.emission_interval * MSEC_PER_SEC;
     in = in->next;
   }
+  abuf_puts(abuf, "0\r\n");
   return;
 }
 
 void set_tc_timer(struct autobuf *abuf) {
   struct olsr_if *in;
   in = olsr_cnf->interfaces;
-  if(!timer) return;
+  if(!timer){
+    abuf_puts(abuf, "1\r\n");
+    return;
+  }
   while (in != NULL) {
     olsr_printf(1, "(POPROUTING) Setting Tc Timer=%f for interface %s\n", (double)timer, in->name);
     //olsr_change_timer(in->interf->tc_gen_timer, timer * MSEC_PER_SEC, 0, 1);
@@ -139,5 +147,6 @@ void set_tc_timer(struct autobuf *abuf) {
     in->interf->valtimes.tc=reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
     in = in->next;
   }
+  abuf_puts(abuf, "0\r\n");
   return;
 }
