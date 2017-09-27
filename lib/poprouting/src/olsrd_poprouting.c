@@ -125,7 +125,7 @@ void set_hello_timer(struct autobuf *abuf) {
     in->interf->hello_gen_timer->timer_period = timer * MSEC_PER_SEC;
     in->interf->hello_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
     in->cnf->hello_params.emission_interval = timer;
-    in->cnf->hello_params.validity_time = timer *10;
+    //in->cnf->hello_params.validity_time = timer *10;
     in->interf->valtimes.hello = reltime_to_me(in->cnf->hello_params.validity_time * MSEC_PER_SEC);
     in->interf->hello_etime = in->cnf->hello_params.emission_interval * MSEC_PER_SEC;
     in = in->next;
