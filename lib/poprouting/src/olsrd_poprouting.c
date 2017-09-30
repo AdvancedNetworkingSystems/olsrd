@@ -149,7 +149,7 @@ void set_tc_timer(struct autobuf *abuf) {
     in->interf->tc_gen_timer->timer_period = timer * MSEC_PER_SEC;
     in->interf->tc_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
     in->cnf->tc_params.emission_interval = timer;
-    in->cnf->tc_params.validity_time = timer*60;
+    in->cnf->tc_params.validity_time = timer*30;
     in->interf->valtimes.tc=reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
     in = in->next;
   }
