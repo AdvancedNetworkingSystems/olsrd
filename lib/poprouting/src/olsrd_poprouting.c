@@ -168,6 +168,10 @@ void set_tc_timer(struct autobuf *abuf) {
 }
 
 void set_tc_timer_mult(struct autobuf *abuf) {
+  float current_timer;
+  struct olsr_if *in;
+  assert(abuf);
+  in = olsr_cnf->interfaces;
   if(!timer){
     char response[1024];
     sprintf(response, "tc_mult:%.2f\n", (double)tc_mult);
@@ -177,11 +181,22 @@ void set_tc_timer_mult(struct autobuf *abuf) {
   else {
     tc_mult = timer;
   }
+  while (in != NULL) {
+    olsr_printf(1, "(POPROUTING) Setting Tc Timer Mult=%f for interface %s\n", (double)tc_mult, in->name);
+    current_timer = in->cnf->tc_params.emission_interval;
+    in->cnf->tc_params.validity_time = current_timer * tc_mult;
+    in->interf->valtimes.tc=reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
+    in = in->next;
+  }
   abuf_puts(abuf, "0\r\n");
   return;
 }
 
 void set_hello_timer_mult(struct autobuf *abuf) {
+  float current_timer;
+  struct olsr_if *in;
+  assert(abuf);
+  in = olsr_cnf->interfaces;
   if(!timer){
     char response[1024];
     sprintf(response, "hello_mult:%.2f\n", (double)hello_mult);
@@ -190,6 +205,13 @@ void set_hello_timer_mult(struct autobuf *abuf) {
   }
   else {
     hello_mult = timer;
+  }
+  while (in != NULL) {
+    olsr_printf(1, "(POPROUTING) Setting Hello Timer Mult=%f for interface %s\n", (double)hello_mult, in->name);
+    current_timer = in->cnf->hello_params.emission_interval;
+    in->cnf->hello_params.validity_time = current_timer * hello_mult;
+    in->interf->valtimes.hello = reltime_to_me(in->cnf->hello_params.validity_time * MSEC_PER_SEC);
+    in = in->next;
   }
   abuf_puts(abuf, "0\r\n");
   return;
