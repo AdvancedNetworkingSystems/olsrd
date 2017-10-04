@@ -151,7 +151,9 @@ static unsigned long long SIW_ENTRIES_ALL[] = {
     SIW_NETJSON_NETWORK_COLLECTION, //
     //
     SIW_POPROUTING_HELLO,
-    SIW_POPROUTING_TC //
+    SIW_POPROUTING_TC, //
+    SIW_POPROUTING_HELLO_MULT,
+    SIW_POPROUTING_TC_MULT //
     };
 
 long cache_timeout_generic(info_plugin_config_t *plugin_config, unsigned long long siw) {
