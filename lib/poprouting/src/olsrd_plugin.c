@@ -106,6 +106,8 @@ int olsrd_plugin_init(void) {
 
   functions.HelloTimer = set_hello_timer;
   functions.TcTimer = set_tc_timer;
+  functions.TcTimerMult = set_tc_timer_mult;
+  functions.HelloTimerMult = set_hello_timer_mult;
 
 
   return info_plugin_init(PLUGIN_NAME, &functions, &config);

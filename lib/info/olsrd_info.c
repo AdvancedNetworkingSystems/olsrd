@@ -520,7 +520,9 @@ static void send_info(const char * req, bool add_headers, unsigned int send_what
     } else if(send_what & SIW_POPROUTING){
       SiwLookupTableEntry funcs[] = {
         { SIW_POPROUTING_TC               , functions->TcTimer           }, //
-        { SIW_POPROUTING_HELLO            , functions->HelloTimer        } //
+        { SIW_POPROUTING_HELLO            , functions->HelloTimer        }, //
+        { SIW_POPROUTING_TC_MULT          , functions->TcTimerMult       }, //
+        { SIW_POPROUTING_HELLO_MULT       , functions->HelloTimerMult    } //
       };
       send_info_from_table(&abuf, send_what, funcs, ARRAY_SIZE(funcs), &outputLength);
 

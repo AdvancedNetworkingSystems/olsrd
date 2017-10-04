@@ -116,11 +116,13 @@ typedef struct {
 /*poprouting */
 #define SIW_POPROUTING_HELLO             (1ULL << 20)
 #define SIW_POPROUTING_TC                (1ULL << 21)
-#define SIW_POPROUTING                   (SIW_POPROUTING_HELLO | SIW_POPROUTING_TC)
+#define SIW_POPROUTING_HELLO_MULT        (1ULL << 22)
+#define SIW_POPROUTING_TC_MULT           (1ULL << 23)
+#define SIW_POPROUTING                   (SIW_POPROUTING_HELLO | SIW_POPROUTING_TC | SIW_POPROUTING_HELLO_MULT | SIW_POPROUTING_TC_MULT)
 
 
 /* everything */
-#define SIW_EVERYTHING                   ((SIW_POPROUTING_TC << 1) - 1)
+#define SIW_EVERYTHING                   ((SIW_POPROUTING_TC_MULT << 1) - 1)
 
 
 /* command prefixes */
@@ -172,6 +174,8 @@ typedef struct {
     printer_generic networkCollection;
     printer_generic TcTimer;
     printer_generic HelloTimer;
+    printer_generic TcTimerMult;
+    printer_generic HelloTimerMult;
 
 } info_plugin_functions_t;
 

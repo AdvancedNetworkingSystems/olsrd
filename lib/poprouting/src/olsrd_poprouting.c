@@ -63,6 +63,8 @@
 #include "scheduler.h"
 
 float timer=0;
+float hello_mult = 10;
+float tc_mult = 60;
 
 unsigned long long get_supported_commands_mask(void) {
   return SIW_POPROUTING;
@@ -79,6 +81,14 @@ bool isCommand(const char *str, unsigned long long siw) {
 
     case SIW_POPROUTING_TC:
       prefix = "/TcTimer";
+      break;
+
+    case SIW_POPROUTING_HELLO_MULT:
+      prefix = "/HelloTimerMult";
+      break;
+
+    case SIW_POPROUTING_TC_MULT:
+      prefix = "/TcTimerMult";
       break;
 
     default:
@@ -125,7 +135,7 @@ void set_hello_timer(struct autobuf *abuf) {
     in->interf->hello_gen_timer->timer_period = timer * MSEC_PER_SEC;
     in->interf->hello_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
     in->cnf->hello_params.emission_interval = timer;
-    in->cnf->hello_params.validity_time = timer *10;
+    in->cnf->hello_params.validity_time = timer * hello_mult;
     in->interf->valtimes.hello = reltime_to_me(in->cnf->hello_params.validity_time * MSEC_PER_SEC);
     in->interf->hello_etime = in->cnf->hello_params.emission_interval * MSEC_PER_SEC;
     in = in->next;
@@ -149,9 +159,37 @@ void set_tc_timer(struct autobuf *abuf) {
     in->interf->tc_gen_timer->timer_period = timer * MSEC_PER_SEC;
     in->interf->tc_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
     in->cnf->tc_params.emission_interval = timer;
-    in->cnf->tc_params.validity_time = timer*10;
+    in->cnf->tc_params.validity_time = timer * tc_mult;
     in->interf->valtimes.tc=reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
     in = in->next;
+  }
+  abuf_puts(abuf, "0\r\n");
+  return;
+}
+
+void set_tc_timer_mult(struct autobuf *abuf) {
+  if(!timer){
+    char response[1024];
+    sprintf(response, "tc_mult:%.2f\n", (double)tc_mult);
+    abuf_puts(abuf, response);
+    return;
+  }
+  else {
+    tc_mult = timer;
+  }
+  abuf_puts(abuf, "0\r\n");
+  return;
+}
+
+void set_hello_timer_mult(struct autobuf *abuf) {
+  if(!timer){
+    char response[1024];
+    sprintf(response, "hello_mult:%.2f\n", (double)hello_mult);
+    abuf_puts(abuf, response);
+    return;
+  }
+  else {
+    hello_mult = timer;
   }
   abuf_puts(abuf, "0\r\n");
   return;
