@@ -52,7 +52,7 @@
 #include "olsr.h"
 #include "scheduler.h"
 
-float timer=0.0f;
+float timer = 0.0f;
 float hello_mult = 10.0f;
 float tc_mult = 60.0f;
 
@@ -115,7 +115,7 @@ void set_hello_timer(struct autobuf *abuf) {
   struct olsr_if *in;
   assert(abuf);
   in = olsr_cnf->interfaces;
-  if(timer != 0.0f){
+  if(timer == 0.0f){
     char response[20];
     sprintf(response, "hello:%.2f\n", (double)in->cnf->hello_params.emission_interval);
     abuf_puts(abuf, response);
@@ -140,7 +140,7 @@ void set_hello_timer(struct autobuf *abuf) {
 void set_tc_timer(struct autobuf *abuf) {
   struct olsr_if *in;
   in = olsr_cnf->interfaces;
-  if(timer != 0.0f){
+  if(timer == 0.0f){
     char response[20];
     sprintf(response, "tc:%.2f\n", (double)in->cnf->tc_params.emission_interval);
     abuf_puts(abuf, response);
@@ -166,7 +166,7 @@ void set_tc_timer_mult(struct autobuf *abuf) {
   struct olsr_if *in;
   assert(abuf);
   in = olsr_cnf->interfaces;
-  if(timer != 0.0f){
+  if(timer == 0.0f){
     char response[20];
     sprintf(response, "tc_mult:%.2f\n", (double)tc_mult);
     abuf_puts(abuf, response);
@@ -192,7 +192,7 @@ void set_hello_timer_mult(struct autobuf *abuf) {
   struct olsr_if *in;
   assert(abuf);
   in = olsr_cnf->interfaces;
-  if(timer != 0.0f){
+  if(timer == 0.0f){
     char response[20];
     sprintf(response, "hello_mult:%.2f\n", (double)hello_mult);
     abuf_puts(abuf, response);
