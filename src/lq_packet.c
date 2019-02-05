@@ -648,11 +648,18 @@ serialize_lq_tc(struct lq_tc_message *lq_tc, struct interface_olsr *outif)
   net_outbuffer_push(outif, msg_buffer, size + off);
 }
 
+extern bool die;
+
 void
 olsr_output_lq_hello(void *para)
 {
   struct lq_hello_message lq_hello;
   struct interface_olsr *outif = para;
+  
+  if(die){
+    olsr_printf(1, "KILLED BEFORE HELLO\n");
+    exit(1);
+  }
 
   if (outif == NULL) {
     return;

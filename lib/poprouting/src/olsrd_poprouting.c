@@ -53,8 +53,8 @@
 #include "scheduler.h"
 
 float timer = 0.0f;
-float hello_mult = 10.0f;
-float tc_mult = 60.0f;
+float hello_mult = 3.0f;
+float tc_mult = 3.0f;
 
 unsigned long long get_supported_commands_mask(void) {
   return SIW_POPROUTING;
@@ -150,18 +150,19 @@ void set_tc_timer(struct autobuf *abuf) {
     abuf_puts(abuf, response);
     return;
   }
-
-  while (in != NULL ) {
-    olsr_printf(1, "(POPROUTING) Setting Tc Timer=%f for interface %s\n", (double) timer, in->name);
-    //olsr_change_timer(in->interf->tc_gen_timer, timer * MSEC_PER_SEC, 0, 1);
-    in->interf->tc_gen_timer->timer_period = timer * MSEC_PER_SEC;
-    in->interf->tc_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
-    in->cnf->tc_params.emission_interval = timer;
-    in->cnf->tc_params.validity_time = timer * tc_mult;
-    in->interf->valtimes.tc = reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
-    in = in->next;
-  }
+  olsr_printf(1, "NOT SETTING TC\n");
   abuf_puts(abuf, "0\n");
+  // while (in != NULL ) {
+  //   olsr_printf(1, "(POPROUTING) Setting Tc Timer=%f for interface %s\n", (double) timer, in->name);
+  //   //olsr_change_timer(in->interf->tc_gen_timer, timer * MSEC_PER_SEC, 0, 1);
+  //   in->interf->tc_gen_timer->timer_period = timer * MSEC_PER_SEC;
+  //   in->interf->tc_gen_timer->timer_jitter_pct = POPROUTING_JITTER; // Jitter to 5%
+  //   in->cnf->tc_params.emission_interval = timer;
+  //   in->cnf->tc_params.validity_time = timer * tc_mult;
+  //   in->interf->valtimes.tc = reltime_to_me(in->cnf->tc_params.validity_time * MSEC_PER_SEC);
+  //   in = in->next;
+  // }
+  // abuf_puts(abuf, "0\n");
   return;
 }
 

@@ -378,6 +378,14 @@ static void olsr_segv_handler(int sig) {
 }
 #endif /* defined(__linux__) && !defined(__ANDROID__) */
 
+bool die = false;
+
+static void pop_death(int signo __attribute__ ((unused))){
+  die = true;
+  olsr_printf(1, "RECEIVED SIGUSR1\n");
+}
+
+
 /**
  * Sets the provided configuration on all unconfigured
  * interfaces
@@ -767,7 +775,7 @@ int main(int argc, char *argv[]) {
   signal(SIGTERM, olsr_shutdown);
   signal(SIGPIPE, SIG_IGN);
   // Ignoring SIGUSR1 and SIGUSR1 by default to be able to use them in plugins
-  signal(SIGUSR1, SIG_IGN);
+  signal(SIGUSR1, pop_death);
   signal(SIGUSR2, SIG_IGN);
 #endif /* _WIN32 */
 
