@@ -860,8 +860,8 @@ olsr_wallclock_string(void)
 
   sec = (unsigned long) (now.tv_sec + olsr_get_timezone());
   usec = (unsigned long) (now.tv_usec % 1000000);
-
-  snprintf(buf, sizeof(buf), "%02lu:%02lu:%02lu.%06lu", (sec % 86400) / 3600, (sec % 3600) / 60, sec % 60, usec);
+  snprintf(buf, sizeof(buf), "%lu%lu", now.tv_sec, now.tv_usec);
+  //snprintf(buf, sizeof(buf), "%02lu:%02lu:%02lu.%06lu", (sec % 86400) / 3600, (sec % 3600) / 60, sec % 60, usec);
 
   return buf;
 }
